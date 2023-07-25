@@ -1,5 +1,6 @@
 set(BASE_SRCS
-        empty.cpp
+        CurrentThread.cpp
+        Thread.cpp
         )
 
 add_library(muduo_learn_base SHARED ${BASE_SRCS})
