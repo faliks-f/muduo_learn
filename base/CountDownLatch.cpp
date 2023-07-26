@@ -1,6 +1,5 @@
 #include "base/include/CountDownLatch.h"
 
-
 faliks::CountDownLatch::CountDownLatch(int count)
         : m_mutex(),
           m_count(count),

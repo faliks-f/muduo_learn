@@ -1,7 +1,3 @@
-//
-// Created by faliks on 23-7-25.
-//
-
 #ifndef MUDUO_LEARN_CURRENTTHREAD_H
 #define MUDUO_LEARN_CURRENTTHREAD_H
 

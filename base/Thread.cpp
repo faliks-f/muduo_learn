@@ -1,7 +1,3 @@
-//
-// Created by faliks on 23-7-25.
-//
-
 #include "base/include/Thread.h"
 #include "base/include/CurrentThread.h"
 
