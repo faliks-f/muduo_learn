@@ -19,7 +19,7 @@ void faliks::CountDownLatch::countDown() {
     }
 }
 
-int faliks::CountDownLatch::getCount() const {
+int faliks::CountDownLatch::getCount()  {
     std::scoped_lock<std::mutex> lock(m_mutex);
     return m_count;
 }

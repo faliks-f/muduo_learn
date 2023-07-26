@@ -20,7 +20,7 @@ namespace faliks {
 
         void countDown();
 
-        int getCount() const;
+        int getCount();
     };
 }
 
