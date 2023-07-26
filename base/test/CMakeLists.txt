@@ -1,0 +1,2 @@
+add_executable(ThreadTest ThreadTest.cpp)
+target_link_libraries(ThreadTest muduo_learn_base)
