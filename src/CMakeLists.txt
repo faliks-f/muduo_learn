@@ -1,7 +1,9 @@
 set(SRCS
         Channel.cpp
         EventLoop.cpp
-        )
+        Poller.cpp
+        EPollPoller.cpp
+)
 
 add_library(muduo_learn_src ${SRCS})
 target_link_libraries(muduo_learn_src muduo_base)
