@@ -1,2 +1,5 @@
 add_executable(ThreadTest ThreadTest.cpp)
 target_link_libraries(ThreadTest muduo_learn_base)
+
+add_executable(TimestampTest TimestampTest.cpp)
+target_link_libraries(TimestampTest muduo_learn_base)

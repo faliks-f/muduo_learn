@@ -2,7 +2,8 @@ set(BASE_SRCS
         CurrentThread.cpp
         Thread.cpp
         CountDownLatch.cpp
-        )
+        Timestamp.cpp
+)
 
 add_library(muduo_learn_base SHARED ${BASE_SRCS})
 target_link_libraries(muduo_learn_base pthread)
