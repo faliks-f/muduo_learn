@@ -5,6 +5,7 @@
 #include <sys/prctl.h>
 #include <unistd.h>
 #include <exception>
+#include <utility>
 
 namespace faliks {
 
@@ -16,9 +17,9 @@ namespace faliks {
         pid_t *m_tid;
         CountDownLatch *m_latch;
 
-        ThreadData(ThreadFunc func, const std::string &name, pid_t *tid, CountDownLatch *latch)
+        ThreadData(ThreadFunc func, std::string name, pid_t *tid, CountDownLatch *latch)
                 : m_func(std::move(func)),
-                  m_name(name),
+                  m_name(std::move(name)),
                   m_tid(tid),
                   m_latch(latch) {}
 
@@ -32,7 +33,7 @@ namespace faliks {
             try {
                 m_func();
                 CurrentThread::m_threadName = "finished";
-            } catch (const std::exception e) {
+            } catch (const std::exception &e) {
                 CurrentThread::m_threadName = "crashed";
                 fprintf(stderr, "exception caught in Thread %s\n", m_name.c_str());
                 fprintf(stderr, "reason: %s\n", e.what());
@@ -51,7 +52,6 @@ namespace faliks {
         delete data;
         return nullptr;
     }
-
 
 
     void CurrentThread::cacheTid() {
@@ -73,7 +73,7 @@ namespace faliks {
     }
 
     void Thread::setDefaultName() {
-        int num = m_numCreated.fetch_add(1);
+        int num = static_cast<int>(m_numCreated.fetch_add(1));
         if (m_name.empty()) {
             char buf[32];
             snprintf(buf, sizeof(buf), "Thread%d", num);
