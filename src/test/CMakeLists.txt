@@ -1,0 +1,2 @@
+add_executable(TimerQueueTest TimerQueueTest.cpp)
+target_link_libraries(TimerQueueTest muduo_learn_src)
