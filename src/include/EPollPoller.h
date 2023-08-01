@@ -1,7 +1,3 @@
-//
-// Created by faliks on 23-7-27.
-//
-
 #ifndef MUDUO_LEARN_EPOLLPOLLER_H
 #define MUDUO_LEARN_EPOLLPOLLER_H
 
