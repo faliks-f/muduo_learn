@@ -70,7 +70,7 @@ namespace faliks {
         return static_cast<double>(diff) / Timestamp::kMicroSecondsPerSecond;
     }
 
-    inline Timestamp addTime(Timestamp &timestamp, double seconds) {
+    inline Timestamp addTime(Timestamp timestamp, double seconds) {
         auto delta = static_cast<int64_t>(seconds * Timestamp::kMicroSecondsPerSecond);
         return Timestamp(timestamp.microSecondsSinceEpoch() + delta);
     }
