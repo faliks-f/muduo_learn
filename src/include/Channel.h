@@ -1,7 +1,3 @@
-//
-// Created by faliks on 23-7-25.
-//
-
 #ifndef MUDUO_LEARN_CHANNEL_H
 #define MUDUO_LEARN_CHANNEL_H
 
@@ -11,6 +7,7 @@
 #include <memory>
 #include <functional>
 #include <sys/epoll.h>
+
 namespace faliks {
 
     class EventLoop;
@@ -20,7 +17,7 @@ namespace faliks {
         typedef std::function<void()> EventCallback;
         typedef std::function<void(Timestamp)> ReadEventCallback;
 
-        static const int kNoneEvent =  0;
+        static const int kNoneEvent = 0;
         static const int kReadEvent = EPOLLIN | EPOLLPRI;
         static const int kWriteEvent = EPOLLOUT;
 
@@ -105,7 +102,7 @@ namespace faliks {
         void doNotLogHup();
 
         [[nodiscard]] EventLoop *ownerLoop() const;
-        EventLoop *ownerLoop();
+
         void remove();
     };
 

@@ -15,6 +15,7 @@ faliks::Channel::Channel(faliks::EventLoop *loop, int fd)
           m_tied(false),
           m_eventHandling(false),
           m_addedToLoop(false) {
+    printf("here created Channel\n");
 }
 
 faliks::Channel::~Channel() {
@@ -169,12 +170,14 @@ void faliks::Channel::doNotLogHup() {
     m_logHup = false;
 }
 
-faliks::EventLoop *faliks::Channel::ownerLoop() {
-    return m_loop;
-}
 
 void faliks::Channel::remove() {
     assert(isNoneEvent());
     m_addedToLoop = false;
     m_loop->removeChannel(this);
 }
+
+faliks::EventLoop *faliks::Channel::ownerLoop() const {
+    return m_loop;
+}
+
