@@ -1,6 +1,7 @@
 #include "src/include/Poller.h"
 #include "src/include/EventLoop.h"
 #include "src/include/Channel.h"
+#include "src/include/EPollPoller.h"
 
 faliks::Poller::Poller(faliks::EventLoop *loop)
         : m_loop(loop) {
@@ -14,7 +15,7 @@ bool faliks::Poller::hasChannel(faliks::Channel *channel) const {
 }
 
 faliks::Poller *faliks::Poller::newDefaultPoller(faliks::EventLoop *loop) {
-    return nullptr;
+    return new EPollPoller(loop);
 }
 
 void faliks::Poller::assertInLoopThread() const {

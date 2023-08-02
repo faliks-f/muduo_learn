@@ -71,6 +71,7 @@ namespace faliks {
         Timestamp now(Timestamp::now());
         if (numEvents > 0) {
             //todo: add log
+            printf("%d events happened\n", numEvents);
             fillActiveChannels(static_cast<size_t>(numEvents), activeChannels);
             if (static_cast<size_t>(numEvents) == m_events.size()) {
                 m_events.resize(m_events.size() * 2);
