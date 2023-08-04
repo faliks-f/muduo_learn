@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
 
+find_package(Boost REQUIRED)
+find_library(BOOSTTEST_LIBRARY NAMES boost_unit_test_framework)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(LIBFMTLOG_PATH
