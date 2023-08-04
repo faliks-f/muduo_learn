@@ -5,7 +5,10 @@ set(SRCS
         EPollPoller.cpp
         Timer.cpp
         TimerQueue.cpp
+        InetAddress.cpp
 )
+
+
 
 add_library(muduo_learn_src ${SRCS})
 target_link_libraries(muduo_learn_src muduo_learn_base ${LIBFMTLOG_PATH} pthread)
