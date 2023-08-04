@@ -2,14 +2,16 @@
 #include "src/include/EventLoop.h"
 #include "src/include/Timer.h"
 #include "src/include/Channel.h"
+#include "base/include/fmtlog.h"
 
 #include <sys/timerfd.h>
+#include <cassert>
 
 namespace faliks {
     int createTimerFd() {
         int timerFd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
         if (timerFd < 0) {
-            // todo: log
+            logw("Failed in timerfd_create");
         }
         return timerFd;
     }
@@ -19,7 +21,7 @@ namespace faliks {
         if (microseconds < 100) {
             microseconds = 100;
         }
-        struct timespec ts;
+        struct timespec ts{};
         ts.tv_sec = static_cast<time_t>(microseconds / Timestamp::kMicroSecondsPerSecond);
         ts.tv_nsec = static_cast<long>((microseconds % Timestamp::kMicroSecondsPerSecond) * 1000);
         return ts;
@@ -27,28 +29,27 @@ namespace faliks {
     }
 
     void resetTimerFd(int timerFd, Timestamp expiration) {
-        struct itimerspec newValue;
-        struct itimerspec oldValue;
+        struct itimerspec newValue{};
+        struct itimerspec oldValue{};
         bzero(&newValue, sizeof(newValue));
         bzero(&oldValue, sizeof(oldValue));
         newValue.it_value = howMuchTimeFromNow(expiration);
         int ret = ::timerfd_settime(timerFd, 0, &newValue, &oldValue);
         if (ret) {
-            //todo: log
+            logw("timerfd_settime error");
         }
     }
 
     void readTimerFd(int timerFd, Timestamp now) {
         uint64_t howmany;
         ssize_t n = ::read(timerFd, &howmany, sizeof(howmany));
-        // todo: log
-
+        logi("TimerQueue::handleRead() {} at {}", howmany, now.toString());
         if (n != sizeof(howmany)) {
-            // todo: log
+            logw("TimerQueue::handleRead() reads {} bytes instead of 8", n);
         }
     }
 
-    void TimerQueue::addTimerInLoop(faliks::Timer *timer) {
+    void TimerQueue::addTimerInLoop(Timer *timer) {
         m_loop->assertInLoopThread();
         bool earliestChanged = insert(timer);
         if (earliestChanged) {
@@ -56,7 +57,7 @@ namespace faliks {
         }
     }
 
-    bool TimerQueue::insert(faliks::Timer *timer) {
+    bool TimerQueue::insert(Timer *timer) {
         m_loop->assertInLoopThread();
         assert(m_timers.size() == m_activeTimers.size());
         bool earliestChanged = false;
@@ -157,7 +158,6 @@ namespace faliks {
               m_timerFdChannel(loop, m_timerFd),
               m_timers(),
               m_callingExpiredTimers(false) {
-        printf("here created TimerQueue\n");
         m_timerFdChannel.setReadCallback([this](Timestamp) { handleRead(); });
         m_timerFdChannel.enableReading();
     }
@@ -175,7 +175,7 @@ namespace faliks {
     TimerId TimerQueue::addTimer(std::function<void()> cb, Timestamp when, double interval) {
         auto timer = new Timer(std::move(cb), when, interval);
         m_loop->runInLoop([this, timer]() { addTimerInLoop(timer); });
-        return TimerId(timer, timer->sequence());
+        return {timer, timer->sequence()};
     }
 
     void TimerQueue::cancel(TimerId timerId) {
