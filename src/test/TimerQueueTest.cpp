@@ -1,6 +1,7 @@
 #include "src/include/TimerQueue.h"
 #include "src/include/EventLoop.h"
 #include "base/include/Thread.h"
+#include "base/include/fmtlog.h"
 
 #include <cstdio>
 #include <unistd.h>
@@ -11,12 +12,12 @@ int cnt = 0;
 EventLoop *g_loop;
 
 void printTid() {
-    printf("pid = %d, tid = %d\n", getpid(), CurrentThread::tid());
-    printf("now %s\n", Timestamp::now().toString().c_str());
+    logi("pid = {}, tid = {}", getpid(), CurrentThread::tid());
+    logi("now {}", Timestamp::now().toString().c_str());
 }
 
 void print(const char *msg) {
-    printf("msg %s %s\n", Timestamp::now().toString().c_str(), msg);
+    logi("msg {} {}", Timestamp::now().toString().c_str(), msg);
     if (++cnt == 20) {
         g_loop->quit();
     }
@@ -24,10 +25,11 @@ void print(const char *msg) {
 
 void cancel(TimerId timer) {
     g_loop->cancel(timer);
-    printf("cancelled at %s\n", Timestamp::now().toString().c_str());
+    logi("cancelled at {}", Timestamp::now().toString().c_str());
 }
 
 int main() {
+    fmtlog::startPollingThread(1e8);
     printTid();
     sleep(1);
     {

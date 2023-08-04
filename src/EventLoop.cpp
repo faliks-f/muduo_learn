@@ -2,6 +2,7 @@
 #include "src/include/Channel.h"
 #include "src/include/Poller.h"
 #include "src/include/TimerQueue.h"
+#include "base/include/fmtlog.h"
 
 #include "base/include/CurrentThread.h"
 
@@ -17,7 +18,7 @@ namespace faliks {
     int createEventFd() {
         int eventFd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         if (eventFd < 0) {
-            // todo: log
+            loge("Failed in eventfd");
             abort();
         }
         return eventFd;
@@ -37,9 +38,18 @@ namespace faliks {
               m_wakeupFd(createEventFd()),
               m_wakeupChannel(new Channel(this, m_wakeupFd)),
               m_currentActiveChannel(nullptr) {
+        logd("EventLoop created in thread {}", m_threadId);
+        if (t_loopInThisThread) {
+            loge("Another EventLoop exists in this thread {}", m_threadId);
+        } else {
+            t_loopInThisThread = this;
+        }
+        m_wakeupChannel->setReadCallback([this](Timestamp) { handleRead(); });
+        m_wakeupChannel->enableReading();
     }
 
     EventLoop::~EventLoop() {
+        logd("EventLoop of thread {} destructs in thread {}", m_threadId, CurrentThread::tid());
         m_wakeupChannel->disableAll();
         m_wakeupChannel->remove();
         ::close(m_wakeupFd);
@@ -52,16 +62,15 @@ namespace faliks {
         m_looping = true;
         m_quit = false;
 
-        // todo: log
+        logi("EventLoop start looping");
         {
-//            std::scoped_lock<std::mutex> lock(m_quitMutex);
+            std::scoped_lock<std::mutex> lock(m_quitMutex);
             while (!m_quit) {
                 m_activeChannels.clear();
                 m_pollReturnTime = m_poller->poll(kPollTimeMs, &m_activeChannels);
                 ++m_iteration;
                 m_eventHandling = true;
-                //todo: log
-
+                printActiveChannels();
                 for (auto *channel: m_activeChannels) {
                     m_currentActiveChannel = channel;
                     m_currentActiveChannel->handleEvent(m_pollReturnTime);
@@ -70,6 +79,8 @@ namespace faliks {
                 m_eventHandling = false;
                 doPendingFunctors();
             }
+            logi("EventLoop stop looping");
+            m_looping = false;
         }
     }
 
@@ -80,7 +91,8 @@ namespace faliks {
     }
 
     void EventLoop::abortNotInLoopThread() {
-        // todo: log
+        loge("EventLoop::abortNotInLoopThread - EventLoop was created in threadId = {}, current thread id = {}",
+             m_threadId, CurrentThread::tid());
     }
 
     bool EventLoop::isInLoopThread() const {
@@ -103,7 +115,7 @@ namespace faliks {
 
     void EventLoop::quit() {
         {
-//            std::scoped_lock<std::mutex> lock(m_quitMutex);
+            std::scoped_lock<std::mutex> lock(m_quitMutex);
             m_quit = true;
         }
         if (!isInLoopThread()) {
@@ -205,5 +217,17 @@ namespace faliks {
 
     void EventLoop::cancel(TimerId timerId) {
         return m_timerQueue->cancel(timerId);
+    }
+
+    void EventLoop::handleRead() {
+        uint64_t one = 1;
+        // todo: read event
+
+    }
+
+    void EventLoop::printActiveChannels() const {
+        for (const auto *channel: m_activeChannels) {
+            logd("{} ", channel->reventsToString());
+        }
     }
 }
