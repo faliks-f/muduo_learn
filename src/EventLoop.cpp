@@ -6,6 +6,7 @@
 #include "base/include/CurrentThread.h"
 
 #include <sys/eventfd.h>
+#include <cassert>
 
 namespace faliks {
 
@@ -14,7 +15,6 @@ namespace faliks {
     constexpr int kPollTimeMs = 10000;
 
     int createEventFd() {
-        printf("here create eventfd\n");
         int eventFd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         if (eventFd < 0) {
             // todo: log
@@ -37,7 +37,6 @@ namespace faliks {
               m_wakeupFd(createEventFd()),
               m_wakeupChannel(new Channel(this, m_wakeupFd)),
               m_currentActiveChannel(nullptr) {
-        printf("here created EventLoop\n");
     }
 
     EventLoop::~EventLoop() {
@@ -55,7 +54,7 @@ namespace faliks {
 
         // todo: log
         {
-            std::scoped_lock<std::mutex> lock(m_quitMutex);
+//            std::scoped_lock<std::mutex> lock(m_quitMutex);
             while (!m_quit) {
                 m_activeChannels.clear();
                 m_pollReturnTime = m_poller->poll(kPollTimeMs, &m_activeChannels);
@@ -104,7 +103,7 @@ namespace faliks {
 
     void EventLoop::quit() {
         {
-            std::scoped_lock<std::mutex> lock(m_quitMutex);
+//            std::scoped_lock<std::mutex> lock(m_quitMutex);
             m_quit = true;
         }
         if (!isInLoopThread()) {

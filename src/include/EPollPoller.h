@@ -22,6 +22,7 @@ namespace faliks {
 
         void update(int operation, Channel *channel);
 
+
     public:
         explicit EPollPoller(EventLoop *loop);
 
@@ -32,6 +33,8 @@ namespace faliks {
         void updateChannel(Channel *channel) override;
 
         void removeChannel(Channel *channel) override;
+
+
     };
 }
 
