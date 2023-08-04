@@ -8,7 +8,7 @@ set(SRCS
 )
 
 add_library(muduo_learn_src ${SRCS})
-target_link_libraries(muduo_learn_src muduo_learn_base pthread)
+target_link_libraries(muduo_learn_src muduo_learn_base ${LIBFMTLOG_PATH} pthread)
 
 install(TARGETS muduo_learn_src DESTINATION lib)
 
