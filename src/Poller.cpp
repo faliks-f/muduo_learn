@@ -3,21 +3,23 @@
 #include "src/include/Channel.h"
 #include "src/include/EPollPoller.h"
 
-faliks::Poller::Poller(faliks::EventLoop *loop)
-        : m_loop(loop) {
+namespace faliks {
+    Poller::Poller(EventLoop *loop)
+            : m_loop(loop) {
 
-}
+    }
 
-bool faliks::Poller::hasChannel(faliks::Channel *channel) const {
-    assertInLoopThread();
-    auto it = m_channels.find(channel->getFd());
-    return it != m_channels.end() && it->second == channel;
-}
+    bool Poller::hasChannel(Channel *channel) const {
+        assertInLoopThread();
+        auto it = m_channels.find(channel->getFd());
+        return it != m_channels.end() && it->second == channel;
+    }
 
-faliks::Poller *faliks::Poller::newDefaultPoller(faliks::EventLoop *loop) {
-    return new EPollPoller(loop);
-}
+    Poller *Poller::newDefaultPoller(EventLoop *loop) {
+        return new EPollPoller(loop);
+    }
 
-void faliks::Poller::assertInLoopThread() const {
-//    m_loop->assertInLoopThread();
+    void Poller::assertInLoopThread() const {
+        m_loop->assertInLoopThread();
+    }
 }

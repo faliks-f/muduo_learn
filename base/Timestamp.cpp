@@ -1,7 +1,3 @@
-//
-// Created by faliks on 23-7-27.
-//
-
 #include "base/include/Timestamp.h"
 
 #include <sys/time.h>
