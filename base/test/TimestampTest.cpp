@@ -1,4 +1,5 @@
 #include "base/include/Timestamp.h"
+#include "base/include/fmtlog.h"
 
 #include <vector>
 #include <cstdio>
@@ -7,11 +8,11 @@ using namespace std;
 using faliks::Timestamp;
 
 void passByConstReference(const Timestamp &x) {
-    printf("%s\n", x.toString().c_str());
+    logi("{}", x.toString().c_str());
 }
 
 void passByValue(Timestamp x) {
-    printf("%s\n", x.toString().c_str());
+    logi("{}", x.toString().c_str());
 }
 
 void benchmark() {
@@ -22,9 +23,9 @@ void benchmark() {
     for (int i = 0; i < kNumber; ++i) {
         stamps.push_back(Timestamp::now());
     }
-    printf("start time: %s\n", stamps.front().toString().c_str());
-    printf("finish time: %s\n", stamps.back().toString().c_str());
-    printf( "diff time: %f\n", timeDifference(stamps.back(), stamps.front()));
+    logi("start time: {}", stamps.front().toString().c_str());
+    logi("finish time: {}", stamps.back().toString().c_str());
+    logi( "diff time: {}", timeDifference(stamps.back(), stamps.front()));
 
     int increments[100] = {0};
     int64_t start = stamps.front().microSecondsSinceEpoch();
@@ -33,22 +34,23 @@ void benchmark() {
         int64_t inc = next - start;
         start = next;
         if (inc < 0) {
-            printf("reverse!\n");
+            logi("reverse!\n");
         } else if (inc < 100) {
             ++increments[inc];
         } else {
-            printf("big gap %d\n", static_cast<int>(inc));
+            logi("big gap {}", static_cast<int>(inc));
         }
     }
 
     for (int x = 0; x < 100; ++x) {
-        printf("%2d: %d\n", x, increments[x]);
+        logi("{}: {}", x, increments[x]);
     }
 }
 
 int main() {
+    fmtlog::startPollingThread(1e8);
     Timestamp now(Timestamp::now());
-    printf("%s\n", now.toString().c_str());
+    logi("%s\n", now.toString().c_str());
     passByValue(now);
     passByConstReference(now);
     benchmark();
