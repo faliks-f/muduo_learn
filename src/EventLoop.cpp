@@ -123,9 +123,12 @@ namespace faliks {
         }
     }
 
-    void EventLoop::wakeup() {
+    void EventLoop::wakeup() const {
         constexpr uint64_t one = 1;
-        // todo: socket write
+        ssize_t n = ::write(m_wakeupFd, &one, sizeof(one));
+        if (n != sizeof one) {
+            loge("EventLoop::wakeup() writes {} bytes instead of 8", n);
+        }
     }
 
     Timestamp EventLoop::pollReturnTime() const {
@@ -219,10 +222,12 @@ namespace faliks {
         return m_timerQueue->cancel(timerId);
     }
 
-    void EventLoop::handleRead() {
+    void EventLoop::handleRead() const {
         uint64_t one = 1;
-        // todo: read event
-
+        ssize_t n = ::read(m_wakeupFd, &one, sizeof(one));
+        if (n != sizeof one) {
+            loge("EventLoop::handleRead() reads {} bytes instead of 8", n);
+        }
     }
 
     void EventLoop::printActiveChannels() const {

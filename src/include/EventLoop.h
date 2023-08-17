@@ -43,6 +43,10 @@ namespace faliks {
 
         void abortNotInLoopThread();
 
+        void handleRead() const;
+
+        void printActiveChannels() const;
+
         void doPendingFunctors();
 
     public:
@@ -54,7 +58,7 @@ namespace faliks {
 
         void loop();
 
-        void wakeup();
+        void wakeup() const;
 
         void quit();
 
