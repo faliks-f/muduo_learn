@@ -7,6 +7,7 @@ set(SRCS
         TimerQueue.cpp
         InetAddress.cpp
         Socket.cpp
+        Buffer.cpp
 )
 
 
