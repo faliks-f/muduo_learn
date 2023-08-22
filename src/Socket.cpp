@@ -122,7 +122,10 @@ namespace faliks {
 
     void Socket::setKeepAlive(bool on) {
         int optVal = on ? 1 : 0;
-        setsockopt(m_sockFd, SOL_SOCKET, SO_KEEPALIVE, &optVal, static_cast<socklen_t>(sizeof optVal));
+        int ret = setsockopt(m_sockFd, SOL_SOCKET, SO_KEEPALIVE, &optVal, static_cast<socklen_t>(sizeof optVal));
+        if (ret < 0 && on) {
+            loge("set keep alive failed");
+        }
     }
 
 
