@@ -1,24 +1,77 @@
 #include "src/include/Buffer.h"
 #include "base/include/fmtlog.h"
 
-
 #include <string>
+#include <cstring>
 
 using namespace faliks;
 using namespace std;
 
 bool passed = true;
 
-template<typename T1, typename T2>
-void checkEqual(T1&& a, T2 &&b) {
+template<typename T1>
+void checkEqual(T1 a, int b) {
     if (a == b) {
-        logi("checkEqual: {} == {} passed\n", a, b);
+        logi("checkEqual: {} == {} passed", a, b);
     } else {
-        loge("checkEqual: {} == {} failed\n", a, b);
+        loge("checkEqual: {} == {} failed", a, b);
         passed = false;
     }
 }
 
+template<typename T1>
+void checkEqual(T1 a, size_t b) {
+    if (a == b) {
+        logi("checkEqual: {} == {} passed", a, b);
+    } else {
+        loge("checkEqual: {} == {} failed", a, b);
+        passed = false;
+    }
+}
+
+template<typename T1>
+void checkEqual(const T1 *a, const T1 *b) {
+    if (a == b) {
+        if (a == nullptr) {
+            logi("checkEqual: nullptr == nullptr passed");
+        } else {
+            logi("checkEqual: {} == {} passed", a, b);
+        }
+    } else {
+        loge("checkEqual: {} == {} failed", a, b);
+        passed = false;
+    }
+}
+
+void checkEqual(const string &a, const string &&b) {
+    if (a == b) {
+        logi("checkEqual: {} == {} passed", a, b);
+    } else {
+        loge("checkEqual: {} == {} failed", a, b);
+        passed = false;
+    }
+}
+
+
+void checkEqual(const void *a, const char *b) {
+    const char *a1 = static_cast<const char *>(a);
+    if (a1 == b) {
+        if (a1 == nullptr) {
+            logi("checkEqual: nullptr == nullptr passed");
+        } else {
+            logi("checkEqual: {} == {} passed", a1, b);
+        }
+    } else {
+        loge("checkEqual: {} == {} failed", a1, b);
+        passed = false;
+    }
+    if (strcmp(a1, b) == 0) {
+        logi("checkEqual: {} == {} passed", a1, b);
+    } else {
+        loge("checkEqual: {} == {} failed", a1, b);
+        passed = false;
+    }
+}
 
 void test1() {
     Buffer buffer;
@@ -33,11 +86,10 @@ void test1() {
     checkEqual(buffer.prependableBytes(), Buffer::CHEAP_PREPEND);
 
     const string str2 = buffer.retrieveAsString(50);
-    checkEqual(str.size(), 50);
-    checkEqual(buffer.readableBytes(), str.size() - 50);
-    checkEqual(buffer.writableBytes(), Buffer::INITIAL_SIZE - str.size());
-    checkEqual(buffer.prependableBytes(), Buffer::CHEAP_PREPEND + 50);
     checkEqual(str2.size(), 50);
+    checkEqual(buffer.readableBytes(), str.size() - str2.size());
+    checkEqual(buffer.writableBytes(), Buffer::INITIAL_SIZE - str.size());
+    checkEqual(buffer.prependableBytes(), Buffer::CHEAP_PREPEND + str2.size());
     checkEqual(str2, string(50, 'x'));
 
     buffer.append(str);
@@ -78,7 +130,7 @@ void test2() {
 void test3() {
     Buffer buffer;
     buffer.append(string(800, 'y'));
-    checkEqual(buffer.readableBytes(), 8000);
+    checkEqual(buffer.readableBytes(), 800);
     checkEqual(buffer.writableBytes(), Buffer::INITIAL_SIZE - 800);
 
     buffer.retrieve(500);
@@ -96,7 +148,8 @@ void test4() {
     Buffer buffer;
     buffer.append(string(2000, 'y'));
     checkEqual(buffer.readableBytes(), 2000);
-    checkEqual(buffer.writableBytes(), Buffer::INITIAL_SIZE - 2000);
+    checkEqual(buffer.writableBytes(), 0);
+    checkEqual(buffer.prependableBytes(), Buffer::CHEAP_PREPEND);
 
     buffer.retrieve(1500);
     checkEqual(buffer.readableBytes(), 500);
@@ -118,10 +171,10 @@ void test5() {
     checkEqual(buffer.prependableBytes(), Buffer::CHEAP_PREPEND);
 
     int x = 0;
-    buffer.append(&x, sizeof(x));
+    buffer.prepend(&x, sizeof(x));
     checkEqual(buffer.readableBytes(), 204);
     checkEqual(buffer.writableBytes(), Buffer::INITIAL_SIZE - 200);
-    checkEqual(buffer.prependableBytes(), Buffer::CHEAP_PREPEND);
+    checkEqual(buffer.prependableBytes(), Buffer::CHEAP_PREPEND - 4);
 }
 
 void test6() {
@@ -172,13 +225,13 @@ void test8() {
 int main() {
     fmtlog::startPollingThread(1e8);
     test1();
-//    test2();
-//    test3();
-//    test4();
-//    test5();
-//    test6();
-//    test7();
-//    test8();
+    test2();
+    test3();
+    test4();
+    test5();
+    test6();
+    test7();
+    test8();
     logi("Test passed: {}", passed);
     return 0;
 }
