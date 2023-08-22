@@ -3,7 +3,6 @@
 #include "base/include/fmtlog.h"
 
 #include <cassert>
-#include <cstdio>
 #include <unistd.h>
 
 using namespace faliks;
