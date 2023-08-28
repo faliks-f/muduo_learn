@@ -34,12 +34,6 @@ namespace faliks {
 
         explicit Buffer(size_t initialSize = INITIAL_SIZE);
 
-//        Buffer(const Buffer &) = delete;
-//
-//        Buffer &operator=(const Buffer &) = delete;
-//
-//        Buffer(Buffer &&) = delete;
-
         void swap(Buffer &rhs);
 
         [[nodiscard]] size_t readableBytes() const;
