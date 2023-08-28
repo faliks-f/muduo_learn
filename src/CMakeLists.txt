@@ -8,6 +8,7 @@ set(SRCS
         InetAddress.cpp
         Socket.cpp
         Buffer.cpp
+        TcpConnection.cpp
 )
 
 
