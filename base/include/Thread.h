@@ -1,7 +1,3 @@
-//
-// Created by faliks on 23-7-25.
-//
-
 #ifndef MUDUO_LEARN_THREAD_H
 #define MUDUO_LEARN_THREAD_H
 
@@ -16,7 +12,7 @@
 #include <atomic>
 
 namespace faliks {
-    class Thread : public NoneCopyable {
+    class Thread : NoneCopyable {
     private:
         bool m_started;
         bool m_joined;
@@ -31,7 +27,7 @@ namespace faliks {
         void setDefaultName();
 
     public:
-        typedef std::function<void()> ThreadFunc;
+        using ThreadFunc = std::function<void()>;
 
         explicit Thread(ThreadFunc func, const std::string &name = std::string());
 
