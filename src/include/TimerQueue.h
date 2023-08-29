@@ -16,8 +16,8 @@ namespace faliks {
     class TimerQueue : public NoneCopyable {
 
     private:
-        typedef std::pair<Timestamp, Timer *> Entry;
-        typedef std::pair<Timer *, int64_t> ActiveTimer;
+        using Entry = std::pair<Timestamp, Timer *>;
+        using ActiveTimer = std::pair<Timer *, int64_t>;
         EventLoop *m_loop;
         const int m_timerFd;
         Channel m_timerFdChannel;

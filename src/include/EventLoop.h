@@ -20,9 +20,9 @@ namespace faliks {
 
     class TimerQueue;
 
-    class EventLoop : public NoneCopyable {
+    class EventLoop : NoneCopyable {
     private:
-        typedef std::vector<Channel *> ChannelList;
+        using ChannelList = std::vector<Channel *>;
         std::atomic<bool> m_looping;
         std::atomic<bool> m_quit;
         std::atomic<bool> m_eventHandling;

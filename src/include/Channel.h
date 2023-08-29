@@ -12,10 +12,10 @@ namespace faliks {
 
     class EventLoop;
 
-    class Channel : public NoneCopyable {
+    class Channel : NoneCopyable {
     private:
-        typedef std::function<void()> EventCallback;
-        typedef std::function<void(Timestamp)> ReadEventCallback;
+        using EventCallback = std::function<void()>;
+        using ReadEventCallback = std::function<void(Timestamp)>;
 
         static const int kNoneEvent = 0;
         static const int kReadEvent = EPOLLIN | EPOLLPRI;

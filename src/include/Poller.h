@@ -18,8 +18,8 @@ namespace faliks {
     private:
         EventLoop *m_loop;
     protected:
-        typedef std::vector<Channel *> ChannelList;
-        typedef std::map<int, Channel *> ChannelMap;
+        using ChannelList = std::vector<Channel *>;
+        using ChannelMap = std::map<int, Channel *>;
         ChannelMap m_channels;
     public:
         explicit Poller(EventLoop *loop);

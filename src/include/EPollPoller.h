@@ -9,7 +9,7 @@
 namespace faliks {
     class EPollPoller : public Poller {
     private:
-        typedef std::vector<struct epoll_event> EventList;
+        using EventList = std::vector<struct epoll_event>;
 
         int m_epollFd;
         EventList m_events;
