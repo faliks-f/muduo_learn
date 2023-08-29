@@ -8,7 +8,7 @@
 #include <condition_variable>
 
 namespace faliks {
-    class CountDownLatch : public NoneCopyable {
+    class CountDownLatch : NoneCopyable {
     private:
         std::mutex m_mutex;
         int m_count THREAD_ANNOTATION_ATTRIBUTE__(guarded_by(m_mutex));

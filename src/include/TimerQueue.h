@@ -13,7 +13,7 @@ namespace faliks {
 
     class EventLoop;
 
-    class TimerQueue : public NoneCopyable {
+    class TimerQueue : NoneCopyable {
 
     private:
         using Entry = std::pair<Timestamp, Timer *>;

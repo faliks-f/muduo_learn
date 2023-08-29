@@ -14,7 +14,7 @@ namespace faliks {
 
     class EventLoop;
 
-    class Poller : public NoneCopyable {
+    class Poller : NoneCopyable {
     private:
         EventLoop *m_loop;
     protected:

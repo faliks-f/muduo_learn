@@ -9,7 +9,7 @@ namespace faliks {
 
     class InetAddress;
 
-    class Socket : public NoneCopyable {
+    class Socket : NoneCopyable {
     private:
         const int m_sockFd;
     public:
