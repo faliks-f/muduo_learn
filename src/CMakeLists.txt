@@ -10,6 +10,7 @@ set(SRCS
         Buffer.cpp
         TcpConnection.cpp
         Acceptor.cpp
+        ThreadPool.cpp
         EventLoopThread.cpp
 )
 
