@@ -44,7 +44,7 @@ namespace faliks {
     }
 
     void Socket::bindAddress(const InetAddress &localAddr) const {
-        if (::bind(m_sockFd, localAddr.getSockAddr(), sizeof(sockaddr_in)) < 0) {
+        if (::bind(m_sockFd, localAddr.getSockAddr(), sizeof(sockaddr_in6)) < 0) {
             loge("bind socket failed");
         }
     }
