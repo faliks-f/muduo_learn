@@ -9,9 +9,11 @@
 
 namespace faliks {
 
+    std::atomic<int64_t> faliks::Thread::m_numCreated(0);
+
     class ThreadData {
     public:
-        typedef Thread::ThreadFunc ThreadFunc;
+        using ThreadFunc = Thread::ThreadFunc;
         ThreadFunc m_func;
         std::string m_name;
         pid_t *m_tid;

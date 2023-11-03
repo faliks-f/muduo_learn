@@ -48,6 +48,6 @@ namespace faliks {
         }
     };
 }
-std::atomic<int64_t> faliks::Thread::m_numCreated(0);
+
 
 #endif //MUDUO_LEARN_THREAD_H
