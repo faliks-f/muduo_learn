@@ -44,7 +44,7 @@ namespace faliks {
         event.events = channel->events();
         event.data.ptr = channel;
         int fd = channel->getFd();
-        logi("epoll_ctl op = {} fd = {} event = {}", operationToString(operation), fd, channel->eventsToString());
+        logd("epoll_ctl op = {} fd = {} event = {}", operationToString(operation), fd, channel->eventsToString());
         if (::epoll_ctl(m_epollFd, operation, fd, &event) < 0) {
             if (operation == EPOLL_CTL_DEL) {
                 loge("epoll_ctl op = {} fd = {}", operationToString(operation), fd);
@@ -94,7 +94,7 @@ namespace faliks {
     void EPollPoller::updateChannel(Channel *channel) {
         Poller::assertInLoopThread();
         const int index = channel->index();
-        logi("fd = {} events = {} index = {}", channel->getFd(), channel->eventsToString(), index);
+        logd("fd = {} events = {} index = {}", channel->getFd(), channel->eventsToString(), index);
         if (index == kNew || index == kDeleted) {
             int fd = channel->getFd();
             if (index == kNew) {
@@ -123,7 +123,7 @@ namespace faliks {
     void EPollPoller::removeChannel(Channel *channel) {
         Poller::assertInLoopThread();
         int fd = channel->getFd();
-        logi("fd = {}", fd);
+        logd("fd = {}", fd);
         assert(m_channels.find(fd) != m_channels.end());
         assert(m_channels[fd] == channel);
         assert(channel->isNoneEvent());
