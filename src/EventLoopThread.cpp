@@ -47,6 +47,7 @@ EventLoop *EventLoopThread::startLoop() {
         while (!m_loop) {
             m_cond.wait(lock);
         }
-        loop = m_loop
+        loop = m_loop;
     }
+    return loop;
 }
