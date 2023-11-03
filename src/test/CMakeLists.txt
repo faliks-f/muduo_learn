@@ -10,4 +10,6 @@ target_link_libraries(InetAddressTest muduo_learn_src ${LIBFMTLOG_PATH})
 add_executable(BufferTest BufferTest.cpp)
 target_link_libraries(BufferTest muduo_learn_src ${LIBFMTLOG_PATH})
 
+add_executable(TcpEchoServerTest TcpEchoServerTest.cpp)
+target_link_libraries(TcpEchoServerTest muduo_learn_src ${LIBFMTLOG_PATH})
 
