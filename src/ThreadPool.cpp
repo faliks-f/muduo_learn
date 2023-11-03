@@ -65,7 +65,7 @@ std::vector<EventLoop *> ThreadPool::getAllLoops() {
     m_baseLoop->assertInLoopThread();
     assert(m_started);
     if (m_loops.empty()) {
-        return std::vector<EventLoop *>(1, m_baseLoop);
+        return {m_baseLoop};
     } else {
         return m_loops;
     }
