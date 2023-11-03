@@ -12,6 +12,7 @@ set(SRCS
         Acceptor.cpp
         ThreadPool.cpp
         EventLoopThread.cpp
+        TcpServer.cpp
 )
 
 
